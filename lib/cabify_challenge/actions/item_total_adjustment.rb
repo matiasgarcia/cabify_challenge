@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require 'cabify_challenge/actions/base_adjustment'
+
 module CabifyChallenge
   module Actions
-    class ItemTotalAdjustment
+    class ItemTotalAdjustment < BaseAdjustment
       def initialize(rate:)
         @rate = rate
       end

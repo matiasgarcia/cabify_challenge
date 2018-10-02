@@ -4,7 +4,7 @@ require 'cabify_challenge/rules/base_rule'
 
 module CabifyChallenge
   module Rules
-    class BulkPurchase < BaseRule
+    class GroupPurchase < BaseRule
       def initialize(quantity:, product:)
         @quantity = quantity
         @product = product
@@ -12,7 +12,7 @@ module CabifyChallenge
 
       def apply?(cart)
         line_item = eligible_line_item(cart)
-        line_item && line_item.quantity >= @quantity
+        line_item && line_item.quantity / @quantity >= 1
       end
     end
   end

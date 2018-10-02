@@ -9,6 +9,7 @@ module CabifyChallenge
 
     def apply(cart)
       return 0 unless @rule.apply?(cart)
+
       @action.compute(@rule.eligible_line_item(cart))
     end
   end

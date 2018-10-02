@@ -29,32 +29,58 @@ RSpec.describe CabifyChallenge::Checkout do
       end
     end
     context 'when pricing rules given' do
-      let(:pricing_rules) do
-        [
-          CabifyChallenge::Promotion
-            .new(
-              rule: CabifyChallenge::Rules::BulkPurchase.new(quantity: 3, product: 'TSHIRT'),
-              action: CabifyChallenge::Actions::ItemTotalAdjustment.new(rate: 0.05)
-            )
-        ]
+      context 'like buy 3 get 2 free' do
+        let(:pricing_rules) do
+          [
+            CabifyChallenge::Promotion
+              .new(
+                rule: CabifyChallenge::Rules::GroupPurchase.new(quantity: 3, product: 'TSHIRT'),
+                action: CabifyChallenge::Actions::FreeAdjustment.new(group_quantity: 3,
+                                                                     free_quantity: 2,
+                                                                     rate: 1)
+              )
+          ]
+        end
+        subject { described_class.new(pricing_rules) }
+        context 'and they apply' do
+          before do
+            subject.scan('TSHIRT')
+            subject.scan('TSHIRT')
+            subject.scan('TSHIRT')
+          end
+          it 'returns total with promotion adjustments' do
+            expect(subject.total).to eq(20)
+          end
+        end
       end
-      subject { described_class.new(pricing_rules) }
-      context 'and they apply' do
-        before do
-          subject.scan('TSHIRT')
-          subject.scan('TSHIRT')
-          subject.scan('TSHIRT')
+      context 'like buy 3 or more' do
+        let(:pricing_rules) do
+          [
+            CabifyChallenge::Promotion
+              .new(
+                rule: CabifyChallenge::Rules::BulkPurchase.new(quantity: 3, product: 'TSHIRT'),
+                action: CabifyChallenge::Actions::ItemTotalAdjustment.new(rate: 0.05)
+              )
+          ]
         end
-        it 'returns total with promotion adjustments' do
-          expect(subject.total).to eq(57.00)
+        subject { described_class.new(pricing_rules) }
+        context 'and they apply' do
+          before do
+            subject.scan('TSHIRT')
+            subject.scan('TSHIRT')
+            subject.scan('TSHIRT')
+          end
+          it 'returns total with promotion adjustments' do
+            expect(subject.total).to eq(57.00)
+          end
         end
-      end
-      context 'and none apply' do
-        before do
-          subject.scan('VOUCHER')
-        end
-        it 'returns total without promotion adjustments' do
-          expect(subject.total).to eq(5.00)
+        context 'and none apply' do
+          before do
+            subject.scan('VOUCHER')
+          end
+          it 'returns total without promotion adjustments' do
+            expect(subject.total).to eq(5.00)
+          end
         end
       end
     end
