@@ -16,4 +16,17 @@ RSpec.describe CabifyChallenge::Checkout do
       end
     end
   end
+  describe '#total' do
+    context 'when no pricing rules given' do
+      subject { described_class.new([]) }
+      before do
+        subject.scan('VOUCHER')
+        subject.scan('VOUCHER')
+        subject.scan('MUG')
+      end
+      it 'returns total amount without promotion adjustments' do
+        expect(subject.total).to eq(17.50)
+      end
+    end
+  end
 end
