@@ -9,6 +9,14 @@
 # Offense count: 1
 Style/Documentation:
   Exclude:
+  - 'lib/**/*'
   - 'spec/**/*'
-  - 'test/**/*'
   - 'lib/cabify_challenge.rb'
+
+Metrics/BlockLength:
+  Exclude:
+  - 'spec/**/*'
+
+Metrics/LineLength:
+  Exclude:
+  - 'spec/**/*'
