@@ -28,5 +28,35 @@ RSpec.describe CabifyChallenge::Checkout do
         expect(subject.total).to eq(17.50)
       end
     end
+    context 'when pricing rules given' do
+      let(:pricing_rules) do
+        [
+          CabifyChallenge::Promotion
+            .new(
+              rule: CabifyChallenge::Rules::BulkPurchase.new(quantity: 3, product: 'TSHIRT'),
+              action: CabifyChallenge::Actions::ItemTotalAdjustment.new(rate: 0.05)
+            )
+        ]
+      end
+      subject { described_class.new(pricing_rules) }
+      context 'and they apply' do
+        before do
+          subject.scan('TSHIRT')
+          subject.scan('TSHIRT')
+          subject.scan('TSHIRT')
+        end
+        it 'returns total with promotion adjustments' do
+          expect(subject.total).to eq(57.00)
+        end
+      end
+      context 'and none apply' do
+        before do
+          subject.scan('VOUCHER')
+        end
+        it 'returns total without promotion adjustments' do
+          expect(subject.total).to eq(5.00)
+        end
+      end
+    end
   end
 end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'cabify_challenge/line_item'
+
 module CabifyChallenge
   class Checkout
     PRODUCTS = {
@@ -16,13 +18,25 @@ module CabifyChallenge
     def scan(product)
       raise 'Product does not exist' if PRODUCTS[product].nil?
 
-      @cart[product] ||= 0
-      @cart[product] += 1
+      @cart[product] ||= ::CabifyChallenge::LineItem.new(product: product)
+      @cart[product].add
     end
 
     def total
-      @cart.reduce(0) do |sum, (product_code, quantity)|
-        sum + PRODUCTS[product_code] * quantity
+      (total_without_adjustments + adjustments_total).round(2)
+    end
+
+    private
+
+    def total_without_adjustments
+      @cart.reduce(0) do |sum, (_product_code, line_item)|
+        sum + line_item.total
+      end
+    end
+
+    def adjustments_total
+      @pricing_rules.reduce(0) do |sum, pricing_rule|
+        sum + pricing_rule.apply(@cart)
       end
     end
   end
