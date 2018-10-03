@@ -13,7 +13,7 @@ module CabifyChallenge
 
       def compute(line_item)
         groups = (line_item.quantity / @group_quantity)
-        - groups * line_item.individual_price * @free_quantity * @rate
+        - groups * line_item.product_price * @free_quantity * @rate
       end
     end
   end

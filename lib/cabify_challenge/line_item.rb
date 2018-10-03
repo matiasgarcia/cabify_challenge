@@ -14,10 +14,10 @@ module CabifyChallenge
     end
 
     def total
-      individual_price * quantity
+      product_price * quantity
     end
 
-    def individual_price
+    def product_price
       ::CabifyChallenge::Checkout::PRODUCTS[product]
     end
   end
