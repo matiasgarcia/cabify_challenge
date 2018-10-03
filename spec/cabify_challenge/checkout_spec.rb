@@ -29,6 +29,36 @@ RSpec.describe CabifyChallenge::Checkout do
       end
     end
     context 'when pricing rules given' do
+      context 'collide for the same type of product' do
+        let(:pricing_rules) do
+          [
+            CabifyChallenge::Promotion
+              .new(
+                rule: CabifyChallenge::Rules::GroupPurchase.new(quantity: 3, product: 'TSHIRT'),
+                action: CabifyChallenge::Actions::FreeAdjustment.new(group_quantity: 3,
+                                                                     affected_quantity: 2,
+                                                                     rate: 1)
+              ),
+            CabifyChallenge::Promotion
+              .new(
+                rule: CabifyChallenge::Rules::GroupPurchase.new(quantity: 3, product: 'TSHIRT'),
+                action: CabifyChallenge::Actions::FreeAdjustment.new(group_quantity: 4,
+                                                                     affected_quantity: 3,
+                                                                     rate: 1)
+              )
+          ]
+        end
+        subject { described_class.new(pricing_rules) }
+        before do
+          subject.scan('TSHIRT')
+          subject.scan('TSHIRT')
+          subject.scan('TSHIRT')
+          subject.scan('TSHIRT')
+        end
+        it 'applies best promotion' do
+          expect(subject.total).to eq(20)
+        end
+      end
       context 'like buy 3 get 2 free' do
         let(:pricing_rules) do
           [

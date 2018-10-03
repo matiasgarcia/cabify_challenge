@@ -2,11 +2,12 @@
 
 module CabifyChallenge
   class LineItem
-    attr_reader :product, :quantity
+    attr_reader :product, :quantity, :checkout
 
-    def initialize(product:, quantity: 0)
+    def initialize(product:, quantity: 0, checkout:)
       @product = product
       @quantity = quantity
+      @checkout = checkout
     end
 
     def add

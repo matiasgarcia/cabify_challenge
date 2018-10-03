@@ -2,6 +2,10 @@
 
 This is an implementation of Cabify's Ruby Challenge described [here](https://github.com/cabify/rubyChallenge).
 
+Decisions taken:
+
+When a product fulfills more than one promotion rule, only the best promotion is applied.
+
 ## Installation
 
 Add this line to your application's Gemfile:
