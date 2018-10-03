@@ -18,7 +18,7 @@ module CabifyChallenge
     end
 
     def product_price
-      ::CabifyChallenge::Checkout::PRODUCTS[product]
+      @product.price
     end
   end
 end

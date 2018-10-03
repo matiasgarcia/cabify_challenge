@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require 'cabify_challenge/line_item'
+require 'cabify_challenge/product'
 
 module CabifyChallenge
   class Checkout
     PRODUCTS = {
-      'VOUCHER' => 5.00,
-      'TSHIRT' => 20.00,
-      'MUG' => 7.50
+      'VOUCHER' => CabifyChallenge::Product.new(code: 'VOUCHER', price: 5.00),
+      'TSHIRT' => CabifyChallenge::Product.new(code: 'TSHIRT', price: 20.00),
+      'MUG' => CabifyChallenge::Product.new(code: 'MUG', price: 7.50)
     }.freeze
 
     def initialize(pricing_rules)
@@ -15,11 +16,12 @@ module CabifyChallenge
       @cart = {}
     end
 
-    def scan(product)
-      raise 'Product does not exist' if PRODUCTS[product].nil?
+    def scan(code)
+      product = PRODUCTS[code]
+      raise 'Product does not exist' if product.nil?
 
-      @cart[product] ||= ::CabifyChallenge::LineItem.new(product: product)
-      @cart[product].add
+      @cart[code] ||= ::CabifyChallenge::LineItem.new(product: product)
+      @cart[code].add
     end
 
     def total

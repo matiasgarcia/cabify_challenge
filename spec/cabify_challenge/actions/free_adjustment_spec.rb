@@ -7,10 +7,10 @@ RSpec.describe CabifyChallenge::Actions::FreeAdjustment do
                           group_quantity: 3,
                           affected_quantity: 2)
     end
+    let(:product) { CabifyChallenge::Product.new(code: 'VOUCHER', price: 5.00) }
     context 'when it does not apply' do
       let(:line_item) do
-        CabifyChallenge::LineItem.new(product: 'VOUCHER',
-                                      quantity: 2)
+        CabifyChallenge::LineItem.new(product: product, quantity: 2)
       end
       it 'returns zero' do
         expect(subject.compute(line_item)).to eq(0)
@@ -18,8 +18,7 @@ RSpec.describe CabifyChallenge::Actions::FreeAdjustment do
     end
     context 'when it applies' do
       let(:line_item) do
-        CabifyChallenge::LineItem.new(product: 'VOUCHER',
-                                      quantity: 3)
+        CabifyChallenge::LineItem.new(product: product, quantity: 3)
       end
       it 'returns amount to adjust' do
         expect(subject.compute(line_item)).to eq(-5)
