@@ -36,7 +36,7 @@ RSpec.describe CabifyChallenge::Checkout do
               .new(
                 rule: CabifyChallenge::Rules::GroupPurchase.new(quantity: 3, product: 'TSHIRT'),
                 action: CabifyChallenge::Actions::FreeAdjustment.new(group_quantity: 3,
-                                                                     free_quantity: 2,
+                                                                     affected_quantity: 2,
                                                                      rate: 1)
               )
           ]

@@ -4,9 +4,9 @@ module CabifyChallenge
   class LineItem
     attr_reader :product, :quantity
 
-    def initialize(product:)
+    def initialize(product:, quantity: 0)
       @product = product
-      @quantity = 0
+      @quantity = quantity
     end
 
     def add

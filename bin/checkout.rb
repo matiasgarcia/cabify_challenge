@@ -9,7 +9,7 @@ PRICING_RULES = [
     .new(
       rule: CabifyChallenge::Rules::GroupPurchase.new(quantity: 2, product: 'VOUCHER'),
       action: CabifyChallenge::Actions::FreeAdjustment.new(group_quantity: 2,
-                                                           free_quantity: 1,
+                                                           affected_quantity: 1,
                                                            rate: 1)
     ),
   CabifyChallenge::Promotion
